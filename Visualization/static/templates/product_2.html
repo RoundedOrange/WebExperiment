@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>可视化2：价格散点图</title>
+        {% if messages %}
+<script>
+    {% for msg in messages %}
+        alert('{{ msg.message }}');
+    {% endfor %}
+</script>
+{% endif %}
+    <!-- 引入 echarts.js -->
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="row" >
+        <ul class="nav nav-pills nav-justified">
+            <li>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input class="btn btn-primary" type="submit" name="refresh" value="重新爬取数据">
+                    </form>
+                </li>
+            <li><a href="product_1">百分比统计</a></li>
+            <li class="active"><a href="#">价格散点图</a></li>
+            <li><a href="product_3">各字段数据分布</a> </li>
+            <li><a href="product_4">价格漏斗图</a> </li>
+            <li><a href="product_5">特色词云图</a> </li>
+        </ul>
+    </div>
+    <div class="row"><br><br><br></div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div style="width: 600px;height:800px" id="area_picture"></div>
+        </div>
+        <div class="col-lg-6">
+            <div style="width: 600px;height:800px" id="floor_picture"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var data = {{area_list | safe}}
+    var axisData = []
+    for (var i = 0; i < data.length; i++) {
+      var height = data[i]['price']
+      var weight = data[i]['area']
+      var newArr = [weight, height]
+      axisData.push(newArr)
+    }
+    var mCharts = echarts.init(document.getElementById('area_picture'))
+    var option = {
+      xAxis: {
+        type: 'value',
+        name:'面积',
+        scale: true
+      },
+      yAxis: {
+        type: 'value',
+        name:'价格',
+        scale: true
+      },
+      title :{
+        text: '价格-面积关系散点图',
+         x:'center' ,
+      },
+      series: [
+        {
+          // type: 'scatter',
+          type: 'effectScatter', // 指明图表为带涟漪动画的散点图
+          showEffectOn: 'emphasis', // 出现涟漪动画的时机 render emphasis
+          rippleEffect: {
+            scale: 10 // 涟漪动画时, 散点的缩放比例
+          },
+          data: axisData,
+          symbolSize: 5,
+        }
+      ]
+    }
+    mCharts.setOption(option)
+  </script>
+
+<script>
+    //1. ECharts最基本的代码结构
+    //2. x轴和y轴数据 二维数组 [ [身高,体重],...   ]
+    //3. 将type的值设置为scatter, x轴和y轴的type都是value
+    var data = {{floor_list | safe}}
+    var axisData = []
+    for (var i = 0; i < data.length; i++) {
+      var height = data[i]['price']
+      var weight = data[i]['floor']
+      var newArr = [weight,height]
+      axisData.push(newArr)
+    }
+    var mCharts = echarts.init(document.getElementById('floor_picture'))
+    var option = {
+      xAxis: {
+        type: 'value',
+        name:'楼层',
+        scale: true
+      },
+      yAxis: {
+        type: 'value',
+        name:'价格',
+        scale: true
+      },
+      title :{
+        text: '价格-楼层关系散点图',
+         x:'center' ,
+      },
+      series: [
+        {
+          // type: 'scatter',
+          type: 'effectScatter', // 指明图表为带涟漪动画的散点图
+          showEffectOn: 'emphasis', // 出现涟漪动画的时机 render emphasis
+          rippleEffect: {
+            scale: 10 // 涟漪动画时, 散点的缩放比例
+          },
+          data: axisData,
+          symbolSize: 5,
+        }
+      ]
+    }
+    mCharts.setOption(option)
+  </script>
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>

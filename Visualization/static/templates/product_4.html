@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>可视化4：价格漏斗图</title>
+        {% if messages %}
+<script>
+    {% for msg in messages %}
+        alert('{{ msg.message }}');
+    {% endfor %}
+</script>
+{% endif %}
+    <!-- 引入 echarts.js -->
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="row" >
+        <ul class="nav nav-pills nav-justified">
+            <li>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input class="btn btn-primary" type="submit" name="refresh" value="重新爬取数据">
+                    </form>
+                </li>
+            <li><a href="product_1">百分比统计</a></li>
+            <li><a href="product_2">价格散点图</a></li>
+            <li><a href="product_3">各字段数据分布</a> </li>
+            <li class="active"><a href="#">价格漏斗图</a> </li>
+            <li><a href="product_5">特色词云图</a> </li>
+        </ul>
+    </div>
+    <div class="row"><br><br><br></div>
+    <div class="row">
+            <div style="width: 1200px;height:800px" id="price"></div>
+    </div>
+</div>
+
+<script>
+    var myChart = echarts.init(document.getElementById('price'));
+var option;
+var price = {{price | safe}};
+var tag = {{tag | safe}};
+var input_data = [];
+for(var i=0;i<price.length;i++)
+{
+input_data.push({value:price[i],name:tag[i]});
+}
+console.log(input_data);
+option =
+{
+    color: [ '#f79f6f','#f25e49','#16dcb7','#4098ff'],
+    tooltip: { //弹窗信息
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c}%",
+        formatter: function (data) {
+     return data.name+" : "+data.value.toFixed(2)+"%";
+      }
+    },
+    title : {
+    text: '万元内的价格漏斗图',
+    x: 'center',
+    y: 'bottom',
+    textStyle:{fontSize:30,},
+    },
+    // calculable: true,              // 默认关闭可计算特性
+    series: [{
+        name: '价格漏斗图',
+        type: 'funnel',
+        left: '10%',
+        top: 10,
+        //x2: 80,
+        bottom: 0,
+        width: '80%',
+        height: "80%",
+        min: 0,
+        max: 100,
+        minSize: '2%', //与漏斗形状有关
+        maxSize: '100%', //与漏斗形状有关
+        sort: 'descending',
+        gap: 2,
+        labelLine: {
+            length: 10,
+            lineStyle: {
+                width: 1,
+                type: 'solid'
+            }
+        },
+        itemStyle: {
+            borderColor: '#fff',
+            borderWidth: 1
+        },
+        emphasis: {
+            label: {
+                fontSize: 20
+            }
+        },
+        data: input_data
+}]
+};
+myChart.setOption(option);
+</script>
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>

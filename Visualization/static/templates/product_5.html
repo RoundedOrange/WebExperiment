@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>可视化5：特色词云</title>
+        {% if messages %}
+<script>
+    {% for msg in messages %}
+        alert('{{ msg.message }}');
+    {% endfor %}
+</script>
+{% endif %}
+    <!-- 引入 echarts.js -->
+     <script src='https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js'></script>
+    <script src="static/js/echarts-wordcloud.js"></script>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row" >
+            <ul class="nav nav-pills nav-justified">
+                <li>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input class="btn btn-primary" type="submit" name="refresh" value="重新爬取数据">
+                    </form>
+                </li>
+                <li><a href="product_1">百分比统计</a></li>
+                <li><a href="product_2">价格散点图</a></li>
+                <li><a href="product_3">各字段数据分布</a> </li>
+                <li><a href="product_4">价格漏斗图</a> </li>
+                <li class="active"><a href="#">特色词云图</a> </li>
+            </ul>
+        </div>
+        <div class="row"><br><br><br></div>
+        <div class="row">
+            <div id="cloud" style="width: 1200px;height:800px;"></div>
+        </div>
+    </div>
+<script>
+            var chart = echarts.init(document.getElementById('cloud'));
+            var option = {
+                tooltip: {},
+                series: [ {
+                    type: 'wordCloud',
+                    gridSize: 2,
+                    sizeRange: [12, 50],
+                    rotationRange: [-90, 90],
+                    shape: 'pentagon',
+                    width: 600,
+                    height: 400,
+                    drawOutOfBound: true,
+                    textStyle: {
+                        normal: {
+                            color: function () {
+                                return 'rgb(' + [
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160)
+                                ].join(',') + ')';
+                            }
+                        },
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowColor: '#333'
+                        }
+                    },
+                    data: [
+                        {
+                            name: '近BRT',
+                            value: {{brt}},
+                            textStyle: {
+                                normal: {
+                                    color: 'black'
+                                },
+                                emphasis: {
+                                    color: 'red'
+                                }
+                            }
+                        },
+                        {
+                            name: '马上入住',
+                            value: {{mashangruzhu}}
+                        },
+                        {
+                            name: '随时看房',
+                            value: {{suishikanfang}}
+                        },
+                        {
+                            name: '临近地铁',
+                            value: {{linjinditie}}
+                        },
+                        {
+                            name: '独卫',
+                            value: {{duwei}}
+                        },
+                        {
+                            name: '独阳',
+                            value: {{duyang}}
+                        },
+                        {
+                            name: '首次出租',
+                            value: {{shoucichuzu}}
+                        },
+                        {
+                            name: '学校附近',
+                            value: {{xuexiaofujin}}
+                        },
+                    ]
+                } ]
+            };
+
+            chart.setOption(option);
+
+            window.onresize = chart.resize;
+        </script>
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>可视化1：百分比统计</title>
+        {% if messages %}
+<script>
+    {% for msg in messages %}
+        alert('{{ msg.message }}');
+    {% endfor %}
+</script>
+{% endif %}
+    <!-- 引入 echarts.js -->
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row" >
+            <ul class="nav nav-pills nav-justified">
+                <li>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input class="btn btn-primary" type="submit" name="refresh" value="重新爬取数据">
+                    </form>
+                </li>
+                <li><a href="product_1">百分比统计</a></li>
+                <li><a href="product_2">价格散点图</a></li>
+                <li class="active"><a href="#">各字段数据分布</a> </li>
+                <li><a href="product_4">价格漏斗图</a> </li>
+                <li><a href="product_5">特色词云图</a> </li>
+            </ul>
+        </div>
+        <div class="row"><br><br><br></div>
+        <div class="row">
+            <div class="col-md-3">
+                <div id="balcony" style="width: 300px;height:400px;"></div>
+            </div>
+            <div class="col-md-3">
+                <div id="bedroom" style="width: 300px;height:400px;"></div>
+            </div>
+            <div class="col-md-3">
+                <div id="toilet" style="width: 300px;height:400px;"></div>
+            </div>
+            <div class="col-md-3">
+                <div id="hall" style="width: 300px;height:400px;"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div id="area" style="width: 400px;height:400px;"></div>
+            </div>
+            <div class="col-md-4">
+                <div id="floor" style="width: 400px;height:400px;"></div>
+            </div>
+            <div class="col-md-4">
+                <div id="price" style="width: 320px;height:400px;"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var mCharts = echarts.init(document.getElementById('balcony'))
+        var balcony_data = [ {{balcony_dict | safe}}];
+        var option =
+        {
+            title: [
+        {
+          text: "阳数盒须图",
+          left: "center",
+          textStyle: {
+            fontSize: 20,
+            color: "green",
+          },
+        },
+      ],
+        tooltip: {
+        trigger: "item", //触发类型,数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用。
+        axisPointer: {
+          //指示器类型。
+          type: "shadow",
+        },
+      },
+      grid: {
+        //直角坐标系网格。
+        //show: true,//default: false
+        left: "10%",
+        right: "10%",
+        bottom: "15%",
+        //borderWidth: 1,
+        //borderColor: '#000',
+      },
+      xAxis: {
+        type: "category", //'category' 类目轴，适用于离散的类目数据，为该类型时必须通过 data 设置类目数据。
+        show: false,
+      },
+      yAxis: {},
+      series: [
+        {
+          name: "阳数", //箱线图
+          type: "boxplot",
+          hoverAnimation: true,
+          itemStyle: {
+            borderColor: "#108EE9", //boxplot图形的描边颜色。支持的颜色格式同 color，不支持回调函数。
+          },
+          data: balcony_data,
+        },
+      ],
+        };
+mCharts.setOption(option)
+    </script>
+
+        <script>
+        var mCharts = echarts.init(document.getElementById('bedroom'))
+        var bedroom_data = [ {{bedroom_dict | safe}}];
+        var option =
+        {
+            title: [
+        {
+          text: "室数盒须图",
+          left: "center",
+          textStyle: {
+            fontSize: 20,
+            color: "green",
+          },
+        },
+      ],
+        tooltip: {
+        trigger: "item", //触发类型,数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用。
+        axisPointer: {
+          //指示器类型。
+          type: "shadow",
+        },
+      },
+      grid: {
+        //直角坐标系网格。
+        //show: true,//default: false
+        left: "10%",
+        right: "10%",
+        bottom: "15%",
+        //borderWidth: 1,
+        //borderColor: '#000',
+      },
+      xAxis: {
+        type: "category", //'category' 类目轴，适用于离散的类目数据，为该类型时必须通过 data 设置类目数据。
+        show: false,
+      },
+      yAxis: {},
+      series: [
+        {
+          name: "室数", //箱线图
+          type: "boxplot",
+          hoverAnimation: true,
+          itemStyle: {
+            borderColor: "#108EE9", //boxplot图形的描边颜色。支持的颜色格式同 color，不支持回调函数。
+          },
+          data: bedroom_data,
+        },
+      ],
+        };
+mCharts.setOption(option)
+    </script>
+        <script>
+        var mCharts = echarts.init(document.getElementById('hall'))
+        var hall_data = [ {{hall_dict | safe}}];
+        var option =
+        {
+            title: [
+        {
+          text: "厅数盒须图",
+          left: "center",
+          textStyle: {
+            fontSize: 20,
+            color: "green",
+          },
+        },
+      ],
+        tooltip: {
+        trigger: "item", //触发类型,数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用。
+        axisPointer: {
+          //指示器类型。
+          type: "shadow",
+        },
+      },
+      grid: {
+        //直角坐标系网格。
+        //show: true,//default: false
+        left: "10%",
+        right: "10%",
+        bottom: "15%",
+        //borderWidth: 1,
+        //borderColor: '#000',
+      },
+      xAxis: {
+        type: "category", //'category' 类目轴，适用于离散的类目数据，为该类型时必须通过 data 设置类目数据。
+        show: false,
+      },
+      yAxis: {},
+      series: [
+        {
+          name: "厅数", //箱线图
+          type: "boxplot",
+          hoverAnimation: true,
+          itemStyle: {
+            borderColor: "#108EE9", //boxplot图形的描边颜色。支持的颜色格式同 color，不支持回调函数。
+          },
+          data: hall_data,
+        },
+      ],
+        };
+mCharts.setOption(option)
+    </script>
+        <script>
+        var mCharts = echarts.init(document.getElementById('toilet'))
+        var toilet_data = [ {{toilet_dict | safe}}];
+        var option =
+        {
+            title: [
+        {
+          text: "卫数盒须图",
+          left: "center",
+          textStyle: {
+            fontSize: 20,
+            color: "green",
+          },
+        },
+      ],
+        tooltip: {
+        trigger: "item", //触发类型,数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用。
+        axisPointer: {
+          //指示器类型。
+          type: "shadow",
+        },
+      },
+      grid: {
+        //直角坐标系网格。
+        //show: true,//default: false
+        left: "10%",
+        right: "10%",
+        bottom: "15%",
+        //borderWidth: 1,
+        //borderColor: '#000',
+      },
+      xAxis: {
+        type: "category", //'category' 类目轴，适用于离散的类目数据，为该类型时必须通过 data 设置类目数据。
+        show: false,
+      },
+      yAxis: {},
+      series: [
+        {
+          name: "卫数", //箱线图
+          type: "boxplot",
+          hoverAnimation: true,
+          itemStyle: {
+            borderColor: "#108EE9", //boxplot图形的描边颜色。支持的颜色格式同 color，不支持回调函数。
+          },
+          data: toilet_data,
+        },
+      ],
+        };
+mCharts.setOption(option)
+    </script>
+
+    <script>
+        var mCharts = echarts.init(document.getElementById('area'))
+        var area_data = [ {{area_dict | safe}}];
+        var option =
+        {
+            title: [
+        {
+          text: "面积盒须图",
+          left: "center",
+          textStyle: {
+            fontSize: 20,
+            color: "green",
+          },
+        },
+      ],
+        tooltip: {
+        trigger: "item", //触发类型,数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用。
+        axisPointer: {
+          //指示器类型。
+          type: "shadow",
+        },
+      },
+      grid: {
+        //直角坐标系网格。
+        //show: true,//default: false
+        left: "10%",
+        right: "10%",
+        bottom: "15%",
+        //borderWidth: 1,
+        //borderColor: '#000',
+      },
+      xAxis: {
+        type: "category", //'category' 类目轴，适用于离散的类目数据，为该类型时必须通过 data 设置类目数据。
+        show: false,
+      },
+      yAxis: {},
+      series: [
+        {
+          name: "面积", //箱线图
+          type: "boxplot",
+          hoverAnimation: true,
+          itemStyle: {
+            borderColor: "#108EE9", //boxplot图形的描边颜色。支持的颜色格式同 color，不支持回调函数。
+          },
+          data: area_data,
+        },
+      ],
+        };
+mCharts.setOption(option)
+    </script>
+
+    <script>
+        var mCharts = echarts.init(document.getElementById('floor'))
+        var floor_data = [ {{floor_dict | safe}}];
+        var option =
+        {
+            title: [
+        {
+          text: "楼层盒须图",
+          left: "center",
+          textStyle: {
+            fontSize: 20,
+            color: "green",
+          },
+        },
+      ],
+        tooltip: {
+        trigger: "item", //触发类型,数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用。
+        axisPointer: {
+          //指示器类型。
+          type: "shadow",
+        },
+      },
+      grid: {
+        //直角坐标系网格。
+        //show: true,//default: false
+        left: "10%",
+        right: "10%",
+        bottom: "15%",
+        //borderWidth: 1,
+        //borderColor: '#000',
+      },
+      xAxis: {
+        type: "category", //'category' 类目轴，适用于离散的类目数据，为该类型时必须通过 data 设置类目数据。
+        show: false,
+      },
+      yAxis: {},
+      series: [
+        {
+          name: "楼层", //箱线图
+          type: "boxplot",
+          hoverAnimation: true,
+          itemStyle: {
+            borderColor: "#108EE9", //boxplot图形的描边颜色。支持的颜色格式同 color，不支持回调函数。
+          },
+          data: floor_data,
+        },
+      ],
+        };
+mCharts.setOption(option)
+    </script>
+
+    <script>
+        var mCharts = echarts.init(document.getElementById('price'))
+        var price_data = [ {{price_dict | safe}}];
+        var option =
+        {
+            title: [
+        {
+          text: "价格（千元）盒须图",
+          left: "center",
+          textStyle: {
+            fontSize: 20,
+            color: "green",
+          },
+        },
+      ],
+        tooltip: {
+        trigger: "item", //触发类型,数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用。
+        axisPointer: {
+          //指示器类型。
+          type: "shadow",
+        },
+      },
+      grid: {
+        //直角坐标系网格。
+        //show: true,//default: false
+        left: "10%",
+        right: "10%",
+        bottom: "15%",
+        //borderWidth: 1,
+        //borderColor: '#000',
+      },
+      xAxis: {
+        type: "category", //'category' 类目轴，适用于离散的类目数据，为该类型时必须通过 data 设置类目数据。
+        show: false,
+      },
+      yAxis: {},
+      series: [
+        {
+          name: "价格（千元）", //箱线图
+          type: "boxplot",
+          hoverAnimation: true,
+          itemStyle: {
+            borderColor: "#108EE9", //boxplot图形的描边颜色。支持的颜色格式同 color，不支持回调函数。
+          },
+          data: price_data,
+        },
+      ],
+        };
+mCharts.setOption(option)
+    </script>
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>

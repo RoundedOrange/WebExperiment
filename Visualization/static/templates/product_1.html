@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>可视化1：百分比统计</title>
+    {% if messages %}
+<script>
+    {% for msg in messages %}
+        alert('{{ msg.message }}');
+    {% endfor %}
+</script>
+{% endif %}
+    <!-- 引入 echarts.js -->
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row" >
+            <ul class="nav nav-pills nav-justified">
+                <li>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input class="btn btn-primary" type="submit" name="refresh" value="重新爬取数据">
+                    </form>
+                </li>
+                <li class="active"><a href="#">百分比统计</a></li>
+                <li><a href="product_2">价格散点图</a></li>
+                <li><a href="product_3">各字段数据分布</a> </li>
+                <li><a href="product_4">价格漏斗图</a> </li>
+                <li><a href="product_5">特色词云图</a> </li>
+            </ul>
+        </div>
+        <div class="row"><br><br><br></div>
+        <div class="row">
+            <div class="col-md-3">
+                <div id="balcony" style="width: 320px;height:400px;"></div>
+            </div>
+            <div class="col-md-3">
+                <div id="bedroom" style="width: 320px;height:400px;"></div>
+            </div>
+            <div class="col-md-3">
+                <div id="toilet" style="width: 320px;height:400px;"></div>
+            </div>
+            <div class="col-md-3">
+                <div id="hall" style="width: 320px;height:400px;"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div id="facing" style="width: 320px;height:400px;"></div>
+            </div>
+            <div class="col-md-3">
+                <div id="floor_height" style="width: 320px;height:400px;"></div>
+            </div>
+            <div class="col-md-3">
+                <div id="renting_type" style="width: 320px;height:400px;"></div>
+            </div>
+            <div class="col-md-3">
+                <div id="has_elevator" style="width: 320px;height:400px;"></div>
+            </div>
+        </div>
+    </div>
+    <!-- balcony_list -->
+
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('balcony'));
+        let balcony_arr = [];
+        var list = {{balcony_list | safe }};
+        for(i=0;i<list.length;i++)
+        {
+            balcony_arr.push({value:list[i]['value'],name:list[i]['balcony_num']})
+        }
+        myChart.setOption({
+        title : {
+                // 是否显示
+                show: true,
+                // 主标题文本，'\n'指定换行
+                text: '阳数统计',
+                // 水平安放位置，默认为左侧，可选为：'center' | 'left' | 'right' | {number}（x坐标，单位px）
+                x: 'center',
+                // 垂直安放位置，默认为全图顶端，可选为：'top' | 'bottom' | 'center' | {number}（y坐标，单位px）
+                y: 'top',
+                // 水平对齐方式，默认根据x设置自动调整，可选为： left' | 'right' | 'center
+                textAlign: 'center',
+            },
+            series : [
+                {
+                    name: '访问来源',
+                    type: 'pie',    // 设置图表类型为饼图
+                    radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                    data: balcony_arr
+                }
+            ]
+        })
+    </script>
+
+<!-- bedroom_list -->
+
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('bedroom'));
+        let bedroom_arr = [];
+        var list = {{bedroom_list | safe }};
+        for(i=0;i<list.length;i++)
+        {
+            bedroom_arr.push({value:list[i]['value'],name:list[i]['bedroom_num']})
+        }
+        myChart.setOption({
+        title : {
+                // 是否显示
+                show: true,
+                // 主标题文本，'\n'指定换行
+                text: '室数统计',
+                // 水平安放位置，默认为左侧，可选为：'center' | 'left' | 'right' | {number}（x坐标，单位px）
+                x: 'center',
+                // 垂直安放位置，默认为全图顶端，可选为：'top' | 'bottom' | 'center' | {number}（y坐标，单位px）
+                y: 'top',
+                // 水平对齐方式，默认根据x设置自动调整，可选为： left' | 'right' | 'center
+                textAlign: 'center',
+            },
+            series : [
+                {
+                    name: '访问来源',
+                    type: 'pie',    // 设置图表类型为饼图
+                    radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                    data: bedroom_arr
+                }
+            ]
+        })
+    </script>
+
+<!-- toilet_list -->
+
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('toilet'));
+        let toilet_arr = [];
+        var list = {{toilet_list | safe }};
+        for(i=0;i<list.length;i++)
+        {
+            toilet_arr.push({value:list[i]['value'],name:list[i]['toilet_num']})
+        }
+        myChart.setOption({
+        title : {
+                // 是否显示
+                show: true,
+                // 主标题文本，'\n'指定换行
+                text: '卫数统计',
+                // 水平安放位置，默认为左侧，可选为：'center' | 'left' | 'right' | {number}（x坐标，单位px）
+                x: 'center',
+                // 垂直安放位置，默认为全图顶端，可选为：'top' | 'bottom' | 'center' | {number}（y坐标，单位px）
+                y: 'top',
+                // 水平对齐方式，默认根据x设置自动调整，可选为： left' | 'right' | 'center
+                textAlign: 'center',
+            },
+            series : [
+                {
+                    name: '访问来源',
+                    type: 'pie',    // 设置图表类型为饼图
+                    radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                    data: toilet_arr
+                }
+            ]
+        })
+    </script>
+
+<!-- hall_list -->
+
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('hall'));
+        let hall_arr = [];
+        var list = {{hall_list | safe }};
+        for(i=0;i<list.length;i++)
+        {
+            hall_arr.push({value:list[i]['value'],name:list[i]['hall_num']})
+        }
+        myChart.setOption({
+        title : {
+                // 是否显示
+                show: true,
+                // 主标题文本，'\n'指定换行
+                text: '厅数统计',
+                // 水平安放位置，默认为左侧，可选为：'center' | 'left' | 'right' | {number}（x坐标，单位px）
+                x: 'center',
+                // 垂直安放位置，默认为全图顶端，可选为：'top' | 'bottom' | 'center' | {number}（y坐标，单位px）
+                y: 'top',
+                // 水平对齐方式，默认根据x设置自动调整，可选为： left' | 'right' | 'center
+                textAlign: 'center',
+            },
+            series : [
+                {
+                    name: '访问来源',
+                    type: 'pie',    // 设置图表类型为饼图
+                    radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                    data: hall_arr
+                }
+            ]
+        })
+    </script>
+
+<!-- facing_list -->
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('facing'));
+        let facing_arr = [];
+        var list = {{facing_list | safe }};
+        for(i=0;i<list.length;i++)
+        {
+            facing_arr.push({value:list[i]['value'],name:list[i]['facing']})
+        }
+        myChart.setOption({
+        title : {
+                // 是否显示
+                show: true,
+                // 主标题文本，'\n'指定换行
+                text: '朝向统计',
+                // 水平安放位置，默认为左侧，可选为：'center' | 'left' | 'right' | {number}（x坐标，单位px）
+                x: 'center',
+                // 垂直安放位置，默认为全图顶端，可选为：'top' | 'bottom' | 'center' | {number}（y坐标，单位px）
+                y: 'top',
+                // 水平对齐方式，默认根据x设置自动调整，可选为： left' | 'right' | 'center
+                textAlign: 'center',
+            },
+            series : [
+                {
+                    name: '访问来源',
+                    type: 'pie',    // 设置图表类型为饼图
+                    radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                    data: facing_arr
+                }
+            ]
+        })
+    </script>
+
+<!-- floor_height_list -->
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('floor_height'));
+        let floor_height_arr = [];
+        var list = {{floor_height_list | safe }};
+        for(i=0;i<list.length;i++)
+        {
+            floor_height_arr.push({value:list[i]['value'],name:list[i]['floor_height']})
+        }
+        myChart.setOption({
+        title : {
+                // 是否显示
+                show: true,
+                // 主标题文本，'\n'指定换行
+                text: '楼层高低统计',
+                // 水平安放位置，默认为左侧，可选为：'center' | 'left' | 'right' | {number}（x坐标，单位px）
+                x: 'center',
+                // 垂直安放位置，默认为全图顶端，可选为：'top' | 'bottom' | 'center' | {number}（y坐标，单位px）
+                y: 'top',
+                // 水平对齐方式，默认根据x设置自动调整，可选为： left' | 'right' | 'center
+                textAlign: 'center',
+            },
+            series : [
+                {
+                    name: '访问来源',
+                    type: 'pie',    // 设置图表类型为饼图
+                    radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                    data: floor_height_arr
+                }
+            ]
+        })
+    </script>
+
+<!-- renting_type_list -->
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('renting_type'));
+        let renting_type_arr = [];
+        var list = {{renting_type_list | safe }};
+        for(i=0;i<list.length;i++)
+        {
+            renting_type_arr.push({value:list[i]['value'],name:list[i]['renting_type']})
+        }
+        myChart.setOption({
+        title : {
+                // 是否显示
+                show: true,
+                // 主标题文本，'\n'指定换行
+                text: '整租合租统计',
+                // 水平安放位置，默认为左侧，可选为：'center' | 'left' | 'right' | {number}（x坐标，单位px）
+                x: 'center',
+                // 垂直安放位置，默认为全图顶端，可选为：'top' | 'bottom' | 'center' | {number}（y坐标，单位px）
+                y: 'top',
+                // 水平对齐方式，默认根据x设置自动调整，可选为： left' | 'right' | 'center
+                textAlign: 'center',
+            },
+            series : [
+                {
+                    name: '访问来源',
+                    type: 'pie',    // 设置图表类型为饼图
+                    radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                    data: renting_type_arr
+                }
+            ]
+        })
+    </script>
+
+<!-- has_elevator_list -->
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('has_elevator'));
+        let has_elevator_arr = [];
+        var list = {{has_elevator_list | safe }};
+        for(i=0;i<list.length;i++)
+        {
+            has_elevator_arr.push({value:list[i]['value'],name:list[i]['has_elevator']})
+        }
+        myChart.setOption({
+        title : {
+                // 是否显示
+                show: true,
+                // 主标题文本，'\n'指定换行
+                text: '有无电梯统计',
+                // 水平安放位置，默认为左侧，可选为：'center' | 'left' | 'right' | {number}（x坐标，单位px）
+                x: 'center',
+                // 垂直安放位置，默认为全图顶端，可选为：'top' | 'bottom' | 'center' | {number}（y坐标，单位px）
+                y: 'top',
+                // 水平对齐方式，默认根据x设置自动调整，可选为： left' | 'right' | 'center
+                textAlign: 'center',
+            },
+            series : [
+                {
+                    name: '访问来源',
+                    type: 'pie',    // 设置图表类型为饼图
+                    radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                    data: has_elevator_arr
+                }
+            ]
+        })
+
+    </script>
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>
